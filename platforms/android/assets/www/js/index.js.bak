@@ -1,0 +1,763 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+
+
+function setupVideo(videoName) {
+       
+       //var videoName = "file:///mnt/sdcard/DCIM/Camera/VID_20131030_033642.3gp";
+       
+        // Get the video element
+       var v = document.getElementById("video1");
+		// var indexOfExtension = videoName.lastIndexOf(".");
+       // //window.alert("found index of extension " + indexOfExtension);
+       // var extension = videoName.substr(indexOfExtension, videoName.length - indexOfExtension);
+       // //window.alert("extension is " + extension);
+       // var ogguri = encodeURI(videoName.replace(extension, ".ogv"));
+       // var webmuri = encodeURI(videoName.replace(extension, ".webm"));
+       // var mp4uri = encodeURI(videoName.replace(extension, ".mp4"));
+
+       // // Get the video element
+       // var v = document.getElementById("media");
+       // window.alert(" media is " + v);
+// 
+       // // Test for support
+       // if (v.canPlayType("video/ogg")) {
+            // v.setAttribute("src", ogguri);
+           // //window.alert("can play ogg");
+       // }
+       // else if (v.canPlayType("video/webm")) {
+           // v.setAttribute("src", webmuri);
+           // //window.alert("can play webm");
+       // }
+       // else if (v.canPlayType("video/mp4")) {
+           // v.setAttribute("src", mp4uri);
+           // //window.alert("can play mp4");
+       // }
+       // else {
+           // window.alert("Can't play anything");
+       // }
+	  v.setAttribute("src", videoName);     
+
+      v.load();
+      
+      setTimeout(function(){	v.play();	} ,4000);
+      
+  }
+
+
+
+
+String.prototype.fileExists = function() {
+    filename = this.trim();
+
+    var response = jQuery.ajax({
+        url: filename,
+        type: 'HEAD',
+        async: false
+    }).status;  
+
+    return (response != "200") ? false : true;
+}
+
+function reset_language(value)
+{
+	var language = {  value: ""};
+
+ 	switch (value) {
+		            case 1 :  
+		            	language.value = "Deutsch";
+		                break;
+		            case 2 :  
+		                language.value = "English";
+		                break;
+		            case 3 :
+		            	language.value = "espa\u00f1ol";		                
+		                break;
+		            case 4 :  
+		            	language.value = "fran\u00e7ais";
+		                break;
+		            case 5 :  
+		                language.value = "italiano";
+		                break;
+		            case 6 :  
+		                language.value = "portugu\u00EAs";
+		                break;    
+		            default :
+		                console.log("DEBUG :: Unhandled languge :: ");
+		                
+		                break;
+		        }
+	
+	set_language(language);	        
+	Lungo.Router.section("step1");	        
+
+
+}
+
+function captureSuccess(mediaFiles) {    
+    
+    budget();
+	Lungo.Router.article("step3","sculpture_setings");
+    
+    setTimeout(function() {  
+    	app.current_mediaFile = mediaFiles[0];
+    	
+		console.log("DEBUG: dentro de captureSuccess:  " + app.current_mediaFile.size);
+		console.log("DEBUG: dentro de captureSuccess:  " + app.current_mediaFile.fullPath );
+
+   	
+    	if (app.current_mediaFile.size < 56000000) // aprox 2min de grabacion
+	    {
+	    	var db = window.openDatabase("Make_it_Database", "1.0", "Make_it_Database", 200000);
+		 	db.transaction(insertDB, errorCB, function()
+		 		{
+		 			budget();
+	 			Lungo.Router.article("step3","sculpture_setings");
+	 			//window.plugins.html5Video.initialize({  	video1: app.current_mediaFile.fullPath  });
+				//window.plugins.html5Video.play("video1", function(video){ });
+				setupVideo(app.current_mediaFile.fullPath);
+		 		});
+	 	}
+	 	else
+	 	{
+		 	navigator.notification.alert(GLOBALS.Literals.error_message_capture, null, 'Uh oh!');
+		    //Lungo.Router.article("step1","tutorial");
+	 	}
+	 	
+	}, 3500);
+  
+       
+}
+
+// Called if something bad happens.
+// 
+function captureError(error) {
+    Lungo.Router.article("step1","tutorial");
+}
+
+// A button will call this function
+//
+function captureVideo() {  
+    navigator.device.capture.captureVideo(captureSuccess, captureError, {limit: 1 , duration:130});      
+}
+
+// Upload files to server
+function uploadFile(mediaFile) {
+	var ft = new FileTransfer(),
+        path = mediaFile.fullPath,
+        name = mediaFile.name;
+        
+        
+    var options = new FileUploadOptions();
+	options.fileKey = "file";
+	options.fileName = mediaFile.name;
+	options.chunkedMode = false;
+	
+	var params = {};
+	params.ID = encodeURIComponent(app.current_transaction_ID);
+	params.NAME = encodeURIComponent(mediaFile.name);
+	
+	options.params = params;
+//DEBUG !!!
+    ft.upload(path,
+        "http://www.instaltic.com/carga.php",
+        function(result) {
+            console.log('DEBUG : Upload success: ' + result.responseCode);
+            console.log('DEBUG : ' + result.bytesSent + ' bytes sent');
+            $("#now_file_uploading").hide("slow");
+			$("#loading-img").hide("slow");
+            
+            
+            $("#orange-tick").slideDown("slow");
+			$("#now_file_uploaded").slideDown("slow");
+			$("#now_file_uploaded_thank").slideDown("slow");
+            
+            
+            
+        },
+        function(error) {
+            console.log('DEBUG : Error uploading file ' + path + ': ' + error.code);
+        },
+        options);
+          
+        
+        $("#now_file_uploading").hide("slow");
+		$("#loading-img").hide("slow");
+        
+        
+        $("#orange-tick").slideDown("slow");
+		$("#now_file_uploaded").slideDown("slow");
+		$("#now_file_uploaded_thank").slideDown("slow"); 
+}
+
+
+function open_pay_pal(){
+	
+	Lungo.Router.article("step3","checkout");
+	
+	var size = parseInt($("#sculpture_size").val());
+	var material = parseInt($("#sculpture_material").val()); 
+	var numberOfCopies = parseInt($("#number_copies").val()); 
+	
+	var jqxhr = $.post( 
+						"http://www.instaltic.com/process.php", 
+							{	"size":  			parseInt($("#sculpture_size").val()) ,
+								"material":  		parseInt($("#sculpture_material").val()) ,
+								"numberOfCopies": 	parseInt($("#number_copies").val()),
+								"language": 		GLOBALS.Literals.locale_paypal 
+							}							
+		
+							, function() { }
+							, "text"
+					);
+							
+	jqxhr.done(function(result) { 
+								app.token = decodeURIComponent(result);
+								var URL = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout-mobile&token=" + app.token ;
+
+								iabRef = window.open(URL, '_blank', 'location=no');
+								iabRef.addEventListener('loadstop', refLoadMobile_close);
+								iabRef.addEventListener('exit', refClose);
+								
+								}
+				);
+	jqxhr.fail(function() { console.log( "DEBUG: error" ); });
+	jqxhr.always(function() { console.log( "DEBUG: complete paypal " );  });
+		
+}			
+
+function refClose (event)	{
+    Lungo.Router.article("step2","gallery");        
+	iabRef.removeEventListener('loadstop', refLoadMobile_close);																		         
+	iabRef.removeEventListener('exit', refClose);
+	
+}
+
+function refLoadMobile_close (event) {
+	
+    if (event.url.match("mobile/close") !== null) {
+    	iabRef.removeEventListener('exit', refClose);
+		iabRef.removeEventListener('loadstop', refLoadMobile_close);
+		
+    	var url_array = decodeURIComponent(event.url).split("/");
+
+    	app.current_transaction_ID = url_array[url_array.length - 1]; 
+    	
+
+    	console.log("DEBUG : en refLoadMobile_close  !!!!: " + app.current_transaction_ID);
+    	
+		//funny stuff
+		uploadFile(app.current_mediaFile);		
+        Lungo.Router.article("step3","uploading");        
+        iabRef.close();
+    }
+    
+    
+}
+
+
+// onSuccess Callback of navigator.geolocation.getCurrentPosition 
+//
+function onSuccess_Current(position) {
+	
+    //console.log('DEBUG: Latitude: ' + position.coords.latitude + ', Longitude: ' + position.coords.longitude + '\n' );
+    
+    var credentials = "Ao-JywuNtjqs4okf_Bi82Okweqw7aKBAi0UP4NNQYq6tremNr18CYxuNzeDdkZzv";    	
+	var lat_long = position.coords.latitude + "," + position.coords.longitude;	
+			
+	var geocodeRequest = "http://dev.virtualearth.net/REST/v1/Locations/" + lat_long + "?&key=" + credentials + "";
+	
+	//console.log("DEBUG: llamo Bing con este parametro : " + geocodeRequest);			   
+	
+	var jqxhr = $.getJSON( geocodeRequest, function(result) {
+		  console.log( "DEBUG: success : " + result.resourceSets[0].resources[0].address.formattedAddress);
+		  document.getElementById('address').value = result.resourceSets[0].resources[0].address.formattedAddress;
+		  document.getElementById('city').value = result.resourceSets[0].resources[0].address.locality;			
+		  document.getElementById('country').value = result.resourceSets[0].resources[0].address.countryRegion;		   
+		});
+		
+	//jqxhr.done(function() { console.log( "DEBUG: second success" ); });
+	jqxhr.fail(function() { console.log( "DEBUG: error" ); });
+	jqxhr.always(function() { 
+		console.log( "DEBUG: complete bing localization" );
+		
+	 });
+}
+//
+// onError Callback receives a PositionError object, navigator.geolocation.getCurrentPosition
+//
+function onError_Current(error) {
+    console.log('DEBUG: en onError_Current code: ' + error.code + ' message: ' + error.message + '\n');    
+}
+
+//set up the texts depending on the language
+function set_language(language) {
+
+	if ( GLOBALS.AvailableLiterals.hasOwnProperty(language.value) )	  
+			{  console.log('DEBUG : setting language: ' + language.value + '\n');	  }
+	else 	{
+	  		console.log('DEBUG : LANGUAGE NOT FOUND IN DICTIONARY:  ' + language.value +' \n');	  	
+	  		console.log('DEBUG : USING DEFAULT LANGUAGE AS ENGLISH\n');
+	  		language.value = "English" ;
+	  }
+		
+	GLOBALS.Literals = GLOBALS.AvailableLiterals[language.value].value;
+		 
+	document.getElementById('step1_label_1').innerHTML=GLOBALS.Literals.step1_label_1;
+	document.getElementById('step1_label_3').innerHTML=GLOBALS.Literals.step1_label_3;
+	document.getElementById('step1_label_4').innerHTML=GLOBALS.Literals.step1_label_4;
+	document.getElementById('step1_label_5').innerHTML=GLOBALS.Literals.step1_label_5;
+	document.getElementById('step1_label_6').innerHTML=GLOBALS.Literals.step1_label_6;
+	document.getElementById('step1_label_8').innerHTML=GLOBALS.Literals.step1_label_8;
+	document.getElementById('step1_label_9').innerHTML=GLOBALS.Literals.step1_label_9;
+	document.getElementById('step1_label_10').innerHTML=GLOBALS.Literals.step1_label_10;
+	
+	$('#label_choose_size').html(GLOBALS.Literals.label_choose_size);
+	$('#label_sculpture_material').html(GLOBALS.Literals.label_sculpture_material);
+	$('#sculpture_material_1').html(GLOBALS.Literals.sculpture_material_1);
+	$('#sculpture_material_2').html(GLOBALS.Literals.sculpture_material_2);
+	$('#sculpture_material_3').html(GLOBALS.Literals.sculpture_material_3);
+	$('#price_label').html(GLOBALS.Literals.price_label);
+	$('#label_number_copies').html(GLOBALS.Literals.label_number_copies);
+	$('#label_Resume_Options').html(GLOBALS.Literals.label_Resume_Options);
+	$('#label_About_Make_it').html(GLOBALS.Literals.label_About_Make_it);
+	$('#label_Close_application').html(GLOBALS.Literals.label_Close_application);
+	$('#menu_about').html("<img src='img/icon.png'>" + GLOBALS.Literals.menu_about);
+	$('#menu_sculpture_settings').html("<img src='img/icon.png'>" + GLOBALS.Literals.menu_sculpture_settings);
+	$('#menu_gallery').html("<img src='img/icon.png'>" + GLOBALS.Literals.menu_gallery);
+	
+	$('#label_change_language').html(GLOBALS.Literals.label_change_language);
+	$('#menu_change_language').html("<img src='img/icon.png'>" + GLOBALS.Literals.label_change_language);
+	
+	
+	
+	
+	
+	$('#label_choose_Settings').html(GLOBALS.Literals.label_choose_Settings);
+	$('#label_Sculpture_Settings').html(GLOBALS.Literals.label_Sculpture_Settings); 	
+	$('#boton_paypal').attr("src", GLOBALS.Literals.paypal_button);	
+	$('#label_accept_terms').html(GLOBALS.Literals.label_accept_terms); 	
+
+	
+	$('#now_conecting_Paypal').html(GLOBALS.Literals.now_conecting_Paypal);
+	$('#now_file_uploading').html(GLOBALS.Literals.now_file_uploading);
+	
+	$('#now_file_uploaded').html(GLOBALS.Literals.now_file_uploaded);
+	$('#now_file_uploaded_thank_text').html(GLOBALS.Literals.now_file_uploaded_thank_text );
+	
+}
+
+function process_address() {
+	try{	
+		var tus_options = {};
+		tus_options.enableHighAccuracy = true;
+		tus_options.maximumAge = 3000;
+		tus_options.timeout = 6000;
+		
+		navigator.geolocation.getCurrentPosition( onSuccess_Current , onError_Current, tus_options );
+	 }
+	catch(err)
+	 {
+	 	console.log("DEBUG: cazó el error dentro de process_address:  " + err.message + '\n');
+	 }	
+}
+
+// Populate the database 
+//
+function createDB(tx) {
+    
+    tx.executeSql('CREATE TABLE IF NOT EXISTS "MAKE_IT_GALLERY" ("id" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE, "fullPath", "name", "date")');
+}
+
+// Populate the database 
+    
+function insertDB(tx) {
+     tx.executeSql(
+         	'INSERT INTO MAKE_IT_GALLERY (fullPath, name, date ) VALUES ("' 
+         	+ app.current_mediaFile.fullPath + '","' +  app.current_mediaFile.name + '","' +  app.get_current_time() + '")' );
+}
+// Query the database
+//
+function queryDB(tx) {
+    tx.executeSql('SELECT * FROM MAKE_IT_GALLERY', [], querySuccess, errorCB);
+}
+
+// Query the success callback
+//
+function querySuccess(tx, results) {
+    var len = results.rows.length;
+    var listOfFiles = new Array();
+    
+    console.log("DEBUG:  entro en querySuccess:  " );
+
+    for  (var i=0; i<len; i++)
+    {
+    	//  window.resolveLocalFileSystemURI("file:///example.txt", onResolveSuccess, fail);
+		if (results.rows.item(i).fullPath.fileExists())
+		{
+			var file = new Object();
+			file.id = results.rows.item(i).id ;
+			file.fullPath = results.rows.item(i).fullPath;
+			file.date = results.rows.item(i).date;
+			listOfFiles.push(file);
+ 			console.log("DEBUG:  dentro de querySuccess:  " +  results.rows.item(i).fullPath  + '\n');
+
+		}		
+   } 
+   	    
+	if (listOfFiles.length > 0 )  
+		document.getElementById('list_gallery').innerHTML ='<li class="dark">	<strong >' + GLOBALS.Literals.label_gallery + '</strong>';
+	else
+		document.getElementById('list_gallery').innerHTML ='<li class="dark">	<strong >' +  GLOBALS.Literals.label_gallery_empty + '</strong>';	
+ 
+    for (var i=0; i<listOfFiles.length; i++){
+		
+		var newFriend = document.createElement('li');
+		newFriend.id = 'friend' + i;			
+		newFriend.setAttribute('class','thumb selectable arrow');
+		newFriend.setAttribute('onclick','router_to_sculpture_settings(' + listOfFiles[i].id + ');');
+
+		 
+		var newFriend_img = document.createElement('img');
+		newFriend_img.id = 'friend_img' + i;
+		//newFriend_img.src = "img/from_video_to_sculpture.jpg";
+		newFriend_img.src = "img/play.png";
+	
+		var newFriend_small = document.createElement('small');
+		newFriend_small.id = 'friend_small' + i;
+		newFriend_small.innerHTML = listOfFiles[i].date;
+		
+		var newFriend_strong = document.createElement('strong');
+		newFriend_strong.id = 'friend_strong' + i;
+		newFriend_strong.innerHTML = GLOBALS.Literals.recorded_on ;
+		
+		
+		document.getElementById('list_gallery').appendChild(newFriend);
+		document.getElementById(newFriend.id).appendChild(newFriend_img);
+    	document.getElementById(newFriend.id).appendChild(newFriend_strong);
+		document.getElementById(newFriend.id).appendChild(newFriend_small);
+    	
+    }
+    
+    Lungo.Router.article("step2","gallery");        
+    
+}
+
+function router_to_gallery()
+{
+	var db2 = window.openDatabase("Make_it_Database", "1.0", "Make_it_Database", 200000);
+    db2.transaction(queryDB, function(){} ,errorCB);
+	Lungo.Router.article("step2","gallery");		
+}
+
+
+function router_to_sculpture_settings (id)
+{  	
+	app.current_selected_object_id = id;
+	var db2 = window.openDatabase("Make_it_Database", "1.0", "Make_it_Database", 200000);
+	budget();
+    db2.transaction(query_for_retreive, Lungo.Router.article("step3","sculpture_setings") , errorCB );		       
+}
+
+function query_for_retreive(tx)
+{
+	tx.executeSql('SELECT * FROM MAKE_IT_GALLERY WHERE id=' + app.current_selected_object_id, [], go_to_sculpture_settings, errorCB);             
+}
+function go_to_sculpture_settings (tx,results)
+{   	
+	app.current_mediaFile = { name : results.rows.item(0).name , fullPath : results.rows.item(0).fullPath }; 
+	
+	window.plugins.html5Video.initialize({  	video1: app.current_mediaFile.fullPath  });
+	window.plugins.html5Video.play("video1", function(video){ });   
+}
+
+
+// Transaction error callback
+//
+function errorCB(err) {
+    console.log("DEBUG: Error processing SQL: " + err.code);
+}
+  
+// Transaction success callback
+//
+function successCB() {
+    var db = window.openDatabase("Make_it_Database", "1.0", "Make_it_Database", 200000);
+    db.transaction(queryDB, errorCB);
+}
+    
+
+//Success handler
+var successHandler = function(purchaseAction){
+  if (window.console != undefined) {
+    console.log("DEBUG:: Purchase completed successfully. id del " + purchaseAction.response);
+    
+  }
+}
+
+//Failure handler
+var failureHandler = function(purchaseActionError){
+  if (window.console != undefined) {
+    console.log("DEBUG :: Purchase did not complete. id del " + purchaseActionError.response);
+    
+  }
+}    
+
+function compra(){
+try
+{
+	/*var transmission = $.getJSON(	'http://www.instaltic.com/Bootstrap_make_it.php', 
+									{'num1': 12, 'num2': 27} , 	
+									function(e) { app.current_service_token = e.result ; 		}
+								); 
+		
+	transmission.done(function() { 	
+								google.sments.inapp.buy({
+														    'jwt'     : app.current_service_token ,
+														    'success' : successHandler,
+														    'failure' : failureHandler
+						 		 						}); */
+						 		 						
+						 		 						$('#price_amount').html("300€");
+						 		 						
+						 		 						
+	// Global InAppBrowser reference
+    var iabRef = window.open('http://www.instaltic.com/Bootstrap_make_it.php', '_system', 'location=no');
+							    //iabRef.addEventListener('loadstop', replaceHeaderImage);
+							    
+							     	/* $.post(	'http://www.instaltic.com/postback_make_it.php', 
+												{'jwt': app.current_service_token } , 	
+												function(e) { console.log("DEBUG :: devuelve " + e ); 		},
+												"text"
+												); 		*/			
+		/*				 		 						
+						 		 }
+					 );
+		
+	transmission.fail(function() { console.log( "DEBUG: trying to retrieve JSON" ); });
+	transmission.always(function() { 
+		console.log( "DEBUG: complete wallet" );
+		
+	 }); */
+
+}
+catch(err)
+ {
+ 	console.log("DEBUG: cazó el error dentro de process_address:  " + err.message + '\n');
+ }	 
+   
+}
+
+
+function replaceHeaderImage() {
+       iabRef.executeSript(	{ file: "https://sandbox.google.com/checkout/inapp/lib/buy.js"},
+							{ code : "google.payments.inapp.buy({ 'jwt'     :" + app.current_service_token + " , 'success' : successHandler, 'failure' : failureHandler	}); " }
+						);
+						
+						 	console.log("DEBUG: dentro de replace ejecuta:  " + "google.payments.inapp.buy({ 'jwt'     :" + app.current_service_token + " , 'success' : successHandler, 'failure' : failureHandler	}); " + '\n');
+
+    }
+
+//Seller Identifier:	18132942670652029682
+//Seller Secret:	jeTGs2sp_3jZxuG8d2lGQw
+
+function exitFromApp(buttonIndex) {	if (buttonIndex==2){  navigator.app.exitApp();	}}
+		
+function tap_on_exit(){
+	navigator.notification.confirm(
+								    GLOBALS.Literals.label_want_to_exit,  // message
+								    exitFromApp,              // callback to invoke with index of button pressed
+								    GLOBALS.Literals.label_exit,            // title
+								    GLOBALS.Literals.label_Cancel_Ok         // buttonLabels
+								    );
+}
+
+
+
+function budget() {	
+	var price;
+	var size = parseInt($("#sculpture_size").val());
+	var material = parseInt($("#sculpture_material").val()); 
+	var numberOfCopies = parseInt($("#number_copies").val()); 
+	switch(size) {
+            case 20 :
+                switch(material) {
+		            case 1 :  // hyper realistic
+		          		price = 300;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);  
+		                break;
+		            case 2 :  //  artistic wood
+		                price = 330;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);
+		                break;
+		            case 3 :   //  artistic silver
+		                price = 250;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);
+		                break;
+		            default :
+		                console.log("DEBUG :: Unhandled budget :: ");
+		                
+		                break;
+		        }
+                
+                break;
+            case 30 :
+                switch(material) {
+		            case 1 :  // hyper realistic
+		          		price = 330;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);  
+		                break;
+		            case 2 :  //  artistic wood
+		                price = 340;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);
+		                break;
+		            case 3 :   //  artistic silver
+		                price = 260;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);
+		                break;
+		            default :
+		                console.log("DEBUG :: Unhandled budget :: ");
+		                break;
+		        }
+                
+                break;
+            case 40 :
+                switch(material) {
+		            case 1 :  // hyper realistic
+		          		price = 360;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);  
+		                break;
+		            case 2 :  //  artistic wood
+		                price = 350;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);
+		                break;
+		            case 3 :   //  artistic silver
+		                price = 280;  	    
+		                price = price * (0.8 * (numberOfCopies - 1) + 1);
+		                break;
+		            default :
+		                console.log("DEBUG :: Unhandled budget :: ");
+		                break;
+		        }
+                break;
+            default :
+                console.log("DEBUG :: Unhandled budget :: ");
+                break;
+        }
+        
+        $('#price_amount').html(Math.floor(price) + "\u20AC");
+        	
+}
+
+
+function setup_database() {	
+	var db = window.openDatabase("Make_it_Database", "1.0", "Make_it_Database", 200000);
+	db.transaction(createDB, errorCB, function(){});
+}
+
+
+ var iabRef = null;	
+ 
+
+var app = {
+    // Application Constructor
+    initialize: function() {
+        this.bindEvents();
+    },
+    
+    // Application attributes    
+    current_mediaFile: function() {},
+    
+    current_time: function() {},
+    
+    current_service_token: function() {},
+    
+    current_transaction_ID : function() {},
+    
+    token : function() {},
+    
+    
+    
+    get_current_time:  function() {
+    	navigator.globalization.dateToString(
+        new Date(),
+        function (date) {	app.current_time = date.value;  	},
+        function () 	{	console.log('DEBUG : Error getting dateString\n'); },
+         {formatLength:'short', selector:'date and time'}
+      );
+     return app.current_time;	
+    }    , 
+       
+    current_selected_object_id :  function() {},
+    
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    
+        //document.addEventListener('backbutton', tap_on_exit, false);
+        document.addEventListener('menubutton', function(){Lungo.View.Aside.toggle("#features");} , false);
+        document.addEventListener('searchbutton', function(){}, false);
+        document.addEventListener('startcallbutton', tap_on_exit, false);
+        document.addEventListener('endcallbutton', tap_on_exit, false);
+        //document.addEventListener("pause", tap_on_exit, false);
+        
+        document.addEventListener('backbutton', function(){ 	Lungo.View.Aside.hide("#features"); }, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicity call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+        app.receivedEvent();
+    },
+    // Update DOM on a Received Event
+    receivedEvent: function() {
+       // Now safe to use the Cordova API
+		try{
+			//get the language of the Device			
+			navigator.globalization.getPreferredLanguage(
+				set_language , 
+				function () {}
+			);
+			
+			//setup database
+			//setup_database();		
+				var db = window.openDatabase("Make_it_Database", "1.0", "Make_it_Database", 200000);
+				db.transaction(createDB, errorCB, function(){});
+			//launch HMI
+			
+				 
+			Lungo.Router.section("main"); 
+			setTimeout(function() { 
+					//setupVideo();
+					window.plugins.html5Video.initialize({  	video2: "rsa.3gp"  });
+					window.plugins.html5Video.play("video2", function(video){ });
+					Lungo.Router.section("step1");
+					run_text_Of_tutorial();	
+				}, 5000);			
+	     }
+	     catch(err)
+	     {
+	     	console.log("DEBUG: cazó el error dentro de receivedEvent:  " + err.message + '\n');
+	     }	
+    }    
+};

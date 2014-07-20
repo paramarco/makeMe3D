@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=yes" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1,	width=device-width, height=device-height, target-densitydpi=device-dpi" />
+	    <link rel="stylesheet" href="css/lungo.icon.css">
+	    <link rel="stylesheet" href="css/lungo.icon.brand.css">
+	    <link rel="stylesheet" href="css/lungo.css">
+	    <link rel="stylesheet" href="css/theme.lungo.css">
+	    <link rel="stylesheet" type="text/css" href="css/index.css" /> 
+          
+	     <!-- Cordova - Dependencies --> 
+		<script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" charset="utf-8" src="json2.js"></script>	    
+	    <!-- app - Dependencies -->
+	    <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+	    <script type="text/javascript" src="js/dictionary.js"></script>
+	    <script type="text/javascript" src="js/index.js"></script>	    
+	    <!-- Lungo - Dependencies -->
+		<script type="text/javascript" src="js/quo.js"></script>
+		<script type="text/javascript" src="js/lungo.js"></script>
+		<!-- Video Dependencies  -->
+		<script type="text/javascript" src="js/Html5Video.js"></script>
+		<!--   Wallet for digital goods API 
+		<script src="https://sandbox.google.com/checkout/inapp/lib/buy.js"></script>
+		-->
+		
+	    
+	    <title> Make it ! </title>
+    </head>
+       
+	<body class="app" >
+		<section id="main">
+			<article id="index_loading" class="active">	
+					<!-- <img style="margin-left:auto; margin-right:auto;" width="100%" height="100%"  src="chica_260x203.png" > -->
+					
+		        	<div class="app_apache">
+		        		
+			     		<div id="deviceready" class="blink">
+			                <p class="event listening">loading </p>			           
+			            </div>
+			        </div>  
+			        <script type="text/javascript" charset="utf-8">
+			        	app.initialize();
+					</script>	        
+	       	</article>	 	
+		</section>		
+	
+		<section id="step1" data-transition="slide">
+			<header>				
+				<nav>
+		        	<a href="#"  data-view-menu="options" >  <img class="icon" src="img/chica.png" ></a>			        	
+		        </nav>	 
+				<nav class="right">
+		        	<a href="#features" data-target="aside" data-view-menu="options-icons" data-icon="menu">  </a>
+		        	
+		        </nav>		        
+			</header>
+			<article id="tutorial" class="active centered" >				
+				<div class="div1">
+		            	<ul class="list indented">
+			                <li class="dark">
+			                    <strong id="tutorial_1" style="display:none;">Welcome to Make It! follow the instructions and you'll see how easy is to get a Sculpture.</strong>
+			                    <strong id="tutorial_2" style="display:none;">should you want to make an entire figure, you must completely surround the Object when recording.</strong>
+								<strong id="tutorial_3" style="display:none;">Try to record it from all angles. Travel the object slowly, just 20 seconds recording will be enough.</strong>			                    
+			                    <strong id="tutorial_4" style="display:none;">You can also record parts of an object, so only the recorded parts will be reproduced.</strong>			                    
+			                    <strong id="tutorial_5" style="display:none;">You can record yourself too. Remember not to move and try to make it slowly.</strong>			                    
+			                    <strong id="tutorial_6" style="display:none;">When you have the recordings ready, select one from your gallery and put your shipping data.  </strong>			                    
+			                    <strong id="tutorial_7" style="display:none;">Click on the icon on the bottom to start recording.  </strong>
+		                    </li>		            
+			           	</ul>
+				</div>  
+				
+	          	 <div class="div2" >	           
+	            	<!--  <video id="video2" width="100%" height="100%" controls preload='none'  src="" > 
+	            	  <source src="http://media.w3.org/2010/05/sintel/trailer.mp4"
+						         type='video/mp4; codecs="avc1, mp4a"'>
+						<source src="http://media.w3.org/2010/05/sintel/trailer.ogv"
+        				 type='video/ogg; codecs="theora, vorbis"'>
+        				 </video> --> 
+	             	<img id="carta-ajuste_1" style=" display:none; margin-left:auto; margin-right:auto;" width="100%" height="100%"  src="img/carta-ajuste_1.gif" > 
+	             	<img id="carta-ajuste_2" style=" display:none; margin-left:auto; margin-right:auto;" width="100%" height="100%"  src="img/carta-ajuste_2.gif" >
+	             	<img id="carta-ajuste_3" style=" display:none; margin-left:auto; margin-right:auto;" width="100%" height="100%"  src="img/carta-ajuste_3.gif" >
+	             	<img id="carta-ajuste_4" style=" display:none; margin-left:auto; margin-right:auto;" width="100%" height="100%"  src="img/carta-ajuste_4.gif" >
+	             	
+            	</div >	
+            			            
+	            <div class="div3">	           			
+					<table  border="0" cellpadding="0" cellspacing="0" height="60%"  width="100%">
+					<tr height="100%"  width="100%">
+						<td align="left" valign="top" width="25%">
+							<img width="100%" height="100%" src="img/boton_camara.png" onclick="captureVideo();">	
+						</td>
+						<td align="center" valign="top" width="50%"> </td>
+						<td align="right" valign="top" width="25%">
+							<img width="100%" height="100%" id="link_of_gallery"  src="img/boton_album.png" >   
+						</td>
+					</tr>
+					</table>						
+	           </div >		      			 
+	    	</article>			
+   		</section>
+   		
+   		<aside id="features">
+        <header data-title="Options"></header>
+        <article class="active list">
+            <ul>
+                <li id="resume_options" class="current">
+                		<br> 
+                		<a href="#" data-icon="refresh" > &nbsp;  &nbsp;                     
+                        <strong id="label_Resume_Options">Resume Options</strong>
+                        </a>
+                        <br>                    
+                </li>
+                <li id="about_make_it">
+                		<br>
+                		<a href="#" data-icon="info" >&nbsp;  &nbsp;
+                		<strong id="label_About_Make_it">About Make it</strong>
+                		</a>
+                		<br>                      
+                </li>
+                <li id="change_language">
+                		<br>
+                		<a href="#" data-icon="chat" > &nbsp;  &nbsp;
+                		<strong id="label_change_language">Language</strong>
+                		</a> 
+                		<br>                     
+                </li>
+
+                <li id="close_application">
+                		<br>                    
+                		<a href="#" data-icon="close" >&nbsp;  &nbsp;
+                        <strong id="label_Close_application">Close application</strong>
+                        </a> 
+                        <br>                    
+                </li>
+            </ul>
+        </article>
+    	</aside>
+   		
+   		<section id="step2" data-transition="slide"> 
+			<header > 	
+				<nav id="back_sign_in_gallery">
+		            <a href="#"  data-view-menu="options-icons"  data-icon="left" > </a>
+		            <a href="#"  data-view-menu="options" >  <img class="icon" src="img/chica.png" ></a>	
+		            	<strong id="menu_gallery" style="font-size:25px;color:#0093d5;"> Gallery </strong>
+		             
+		        </nav>
+		        <nav class="right">		            
+		            <a href="#features" data-target="aside" data-view-menu="options" data-icon="menu"></a>
+		        </nav>
+			</header>
+			<article id="gallery" class="active list indented scroll">
+		        <ul id="list_gallery">
+		           <!--
+		           	<li class="dark">
+			        	<strong >Choose a video of your Gallery.</strong>			                    
+					</li>
+		             <li class="thumb selectable arrow" data-image="img/cordova.png">
+		                <strong> recorded on : </strong>
+		                <small> 2013 / 03 / 12   </small>
+		            </li>
+		      		[...]
+		           -->
+		        </ul>
+		    </article>
+		   </section>
+
+		   
+		   <section id="step3" data-transition="slide">
+			
+			<header>	
+				<nav id="back_sign_in_scultpture_settings" >
+					<a href="#" data-view-menu="options-icons"  data-icon="left">	</a>	
+					<a href="#" data-view-menu="options-icons"  >	<img class="icon" src="img/chica.png" >	</a>	
+		            <strong id="menu_sculpture_settings" style="font-size:17px;color:#0093d5;">  Sculpture Einstellungen</strong>
+					            
+		        </nav>
+		        <nav class="right">
+		            <a href="#features" data-target="aside" data-view-menu="options" data-icon="menu"></a>
+		        </nav>
+			</header>
+		    <article id="sculpture_setings" class="active list indented scroll">
+		        <ul>
+		            <li class="dark" >
+		                <strong id="label_Sculpture_Settings">Sculpture Settings</strong>
+		                <small id="label_choose_Settings">choose your desired size and material</small>
+		                
+		            </li>
+		            				
+		   	        <li>		   	        
+		   	        		<form>
+								
+				                <label id="label_sculpture_material">Choose the material/way of sculpting</label>
+				                <label  class="select">
+				                    <select id="sculpture_material" class="custom" onchange="onMaterialChange()">
+				                        <option id="sculpture_material_1" value="1" selected>realistic (printed through a machine)</option>
+				                        <option id="sculpture_material_2" value="2">artistic (in wood)</option>
+				                        <option id="sculpture_material_3" value="3">artistic (in clay)</option>
+				                    </select>
+				                </label>
+				                <label id="label_choose_size">Choose a size </label>
+				                <label class="select">
+				                    <select id="sculpture_size" class="custom" onchange="budget()">
+				                        <option id="sculpture_size_value_1st" value="7" selected>7x7x7 cm<sup>3</sup></option>
+				                        <option id="sculpture_size_value_2nd" value="11">11x11x11 cm<sup>3</sup></option>
+				                        <option id="sculpture_size_value_3rd" value="15" >15x15x15 cm<sup>3</sup></option>
+				                    </select>
+				                </label>
+				                
+				                <label id="label_number_figures">number of figures to sculpt:</label>
+				                <label class="select ">
+					                <select id="number_figures" class="custom" onchange="budget()">
+				                        <option  value="1" id="label_option_number_figures_1_or_2" selected> one or two figures</option>
+				                        <option  value="2" id="label_option_number_figures_group">a group</option>				                        
+				                    </select>	
+   				                </label>
+				               
+				                <label id="label_number_copies">number of copies:</label>
+				                <label class="select ">
+					                <select id="number_copies" class="custom" onchange="budget()">
+				                        <option  value="1" selected>1</option>
+				                        <option  value="2">2</option>
+				                        <option  value="3">3</option>
+				                        <option  value="4">4</option>
+				                    </select>	
+   				                </label>				                    
+			            	 
+		               			<br><br>                	
+				                <strong id="price_label">Price:</strong>
+				                <strong id="price_amount">300 </strong>               
+								<br>
+								<a href="#about" data-router="section" data-icon="info" class="left"></a>						   
+					    		<small id="label_accept_terms" >I accept the terms and conditions</small>
+					    		<br>							
+								<small id="router_to_shipping_data">
+							    <img id="boton_paypal"  class="button compra" src="img/btn_buynow_international.gif" >
+							    </small>
+							                   		         
+					           		<!-- Lungo.Router.article("step3","checkout"); -->	             
+			                </form>
+		   	        </li>
+		   	    	<li >
+					 	<video id="video1" width="100%" height="100%"   onclick="lanza_video_settings();">      </video>					                    
+		            </li>   		            	
+				</ul>
+			</article>
+			
+			<article id="checkout"	class="active list indented">
+				<ul class="list indented">
+			                <li class="dark">
+			                    <strong id="now_conecting_Paypal"> conecting to Paypal ...</strong>			                    
+			                </li>		            
+           		</ul>
+	
+		        <div data-loading=""> </div>
+		        
+
+            </article>	 
+            <article id="uploading"	class="active list indented">		        
+		        
+		            	<ul class="list indented">
+			                <li class="dark">
+			                    <strong id="now_file_uploading"> uploading your video ...</strong>
+			                    <strong id="now_file_uploaded" style="display:none;">  your video is already uploaded  </strong>			                    
+			                </li>
+			               
+			                <li id="now_file_uploaded_thank" style="display:none;" data-image="img/orange-tick.jpg">
+								<strong id="now_file_uploaded_thank_text" > your request is sent to the artisan,  you will receive your sculpture soon. <br> Thank you very much for using Make it! </strong>
+							</li>
+							
+							 <li id="artist_profile" style="display:none;" >
+							 	
+							 	<table align="center"  border="0" cellpadding="1" cellspacing="1" width="100%">
+									<caption> <strong id="label_your_artist">Your Artist</strong></caption>
+									<thead>
+									</thead>
+									<tbody>
+										<tr>
+											<td id="label_name_artist">Name</td>
+											<td colspan="1" rowspan="4" style="width: 80px; height: 80px;">												
+												<img id="artist_fotoPath" src="" width="100%" height="100%">
+											</td>
+										</tr>
+										<tr>
+											<td><strong id="artist_name" > </strong></td>
+										</tr>
+										<tr>
+											<td>email</td>
+										</tr>
+										<tr>
+											<td id="artist_email"> </td>
+										</tr>
+										<tr>
+											<td id="transactionID">	</td>											
+										</tr>
+										
+									</tbody>
+								</table>
+							</li>
+							<li id="website" class="thumb selectable arrow" style="display:none;">
+								tap here to go to Artist's website  
+							</li>
+					</ul>
+			    
+			    
+			    	<div id="loading-img" data-loading=""> </div>
+			    	<!-- <img src="img/orange-tick.jpg" style="display:none; margin-left: center; vertical-align: middle; width: 30%;max-height: 30%" id="orange-tick"> -->			    	    
+				
+				
+			    			    
+
+            </article>
+            
+            <article id="sorry"	class="active list indented">	        
+		            	<ul class="list indented">
+			                <li class="dark">
+			                    <strong> sorry :-( </strong>			                  			                    
+			                </li>
+			               
+			                <li>
+								<strong id="label_noArtistAvailable" > Artists are very busy at the moment, may you try to select another material or try it later </strong>
+							</li>			                		            
+			           	</ul>
+            </article>
+            
+             
+			
+		</section>
+				
+		<section id="step4" data-transition="slide">
+			<header data-title="Make it !" >	
+				<nav>
+					<a id="back_sign_in_shipping_data" href="#" class="button" data-view-menu="options-icons"  data-icon="left"></a>
+		        </nav>
+		        <nav class="right">
+	        		<a data-target="aside" class="button" data-view-menu="options" data-icon="menu"></a>    
+		        </nav>
+			</header>
+						
+			<article id="shipping_data" class="active list indented scroll text align_center ">
+				<form class="margined">
+		        <ul>
+		        	<li>
+		        		<label id="step1_label_1">
+		        			Is the address you'd like to use displayed below? If so, click the corresponding "Ship to this address" button.Or you can enter a new shipping address.
+						</label>
+					</li>	
+		            <li >		            	  
+						<fieldset data-icon="pencil" id="desplegable">
+				                <small id="step1_label_10" class="left">Delivery Address:</small>
+				                <input id="address" type="text" contenteditable="true">
+		            	</fieldset>
+						<fieldset id="despliega_city" style="display:none;" >
+				                <small id="step1_label_4" class="left">Locality:</small>
+				                <input id="city" type="text" contenteditable="true">
+			            </fieldset>  	            	 
+						<fieldset id="despliega_country" style="display:none;" >
+				                <small id="step1_label_5" class="left">Country:</small>
+				                <input id="country" type="text" contenteditable="true">
+			            </fieldset>
+			          
+					</li>   
+						
+				</ul>				
+			  	<ul >
+			  		<li>					
+			        	        	
+			            <a href="#"  id="step1_label_6" data-router="section" class="button thumb" onClick="compra();">Ship to this address </a>			      
+			            <label id="step1_label_3">I agree the terms of Use</label>
+		            </li>
+		           
+	            </ul>
+	            
+	            </form>				        	
+       		</article>
+			
+			
+		</section>
+		
+		<section id="about" data-transition="slide">
+			<header  >	
+				<nav id="back_sign_in_about">
+					<a href="#" data-view-menu="options-icons"  data-icon="left"></a>
+					<a href="#" data-view-menu="options-icons"  >	<img class="icon" src="img/chica.png" >	</a>	 
+		            <strong id="menu_about" style="font-size:25px;color:#0093d5;"> About Make it</strong>
+					
+		        </nav>
+		        
+			</header>
+						
+			<article id="about" class="active list indented scroll text align_center ">
+			
+					<li class="dark">
+	                	<strong id="step1_label_8">using this application</strong>
+                    	<br>
+                    	<label id="step1_label_9">
+		        			This app lets you make a video of a physical object,
+							the video recording will be processed with an algorithm of Artificial Intelligence,
+							resulting in a 3D model of the object you recorded which will be made by
+							our artisans in the material you choose	
+						</label>			
+					</li>			
+			  					        	
+       		</article>
+			
+		</section>
+		
+		<section id="language" data-transition="slide">
+			<header>	
+				<nav id="back_sign_in_language" >
+					<a href="#" data-view-menu="options-icons"  data-icon="left">	</a>
+					<a href="#"  data-view-menu="options-icons"  >  <img class="icon" src="img/chica.png" ></a>						 
+		            <strong id="menu_change_language" style="font-size:25px;color:#0093d5;"> menu_change_language</strong>
+					
+		        </nav>
+		        
+			</header>
+						
+			<article id="language_article" class="active list indented scroll text align_center ">
+			 	<ul>
+	                <li class="thumb selectable arrow" onclick="reset_language(1)">
+	                    <strong>Deutsch</strong>
+	                    <small></small>
+	                </li>
+	                <li class="thumb selectable arrow" onclick="reset_language(2)">
+	                    <strong>English</strong>
+	                    <small></small>
+	                </li>
+	                <li class="thumb selectable arrow" onclick="reset_language(3)">
+	                    <strong>Espa&ntilde;ol</strong>
+	                    <small></small>
+	                </li>
+	                <li class="thumb selectable arrow" onclick="reset_language(4)">
+	                    <strong>Fran&ccedil;ais</strong>
+	                    <small></small>
+	                </li>
+                	<li class="thumb selectable arrow" onclick="reset_language(5)">
+	                    <strong>italiano</strong>
+	                    <small></small>
+	                </li>
+	                
+	                <li class="thumb selectable arrow" onclick="reset_language(6)">
+	                    <strong>Portugu&ecirc;s</strong>
+	                    <small></small>
+	                </li>
+	
+	                
+	            </ul>			
+			  					        	
+       		</article>
+			
+		</section>
+
+
+		
+		
+		
+				
+	<!-- Lungo - Sandbox App -->
+	<script type="text/javascript" charset="utf-8">
+		Lungo.init({	name: 'make it'	    });
+		
+	    
+        
+        
+		Lungo.dom('#close_application').tap(tap_on_exit);
+	    
+	    		
+		Lungo.dom('[data-target=aside]').tap(function(){   Lungo.View.Aside.toggle("#features");  });
+		
+        
+        $("#about_make_it").click(function()	{	Lungo.View.Aside.hide("#features"); Lungo.Router.section("about");	});
+        Lungo.dom('#resume_options').tap(function(){	Lungo.View.Aside.hide("#features");	 });	
+		Lungo.dom('#back_sign_in_about').tap(function (){	Lungo.Router.back(); Lungo.View.Aside.hide("#features");  });
+		Lungo.dom('#back_sign_in_language').tap(function (){	Lungo.Router.back(); Lungo.View.Aside.hide("#features");  });
+		
+		
+		
+		
+		Lungo.dom('#back_sign_in_gallery').tap(function (){		
+															
+															
+															for (var i = 0; i < timeouts.length; i++) {
+															    clearTimeout(timeouts[i]);
+															}
+															//quick reset of the timer array you just cleared
+															run_text_Of_tutorial();
+															run_video_Of_tutorial();
+															
+																		
+															Lungo.Router.section("step1");   
+															Lungo.View.Aside.hide("#features");
+														});
+		Lungo.dom('#back_sign_in_scultpture_settings').tap(function (){	
+			var v = document.getElementById("video1");
+			v.pause();
+			router_to_gallery(); 
+			Lungo.View.Aside.hide("#features"); });
+		
+		
+		
+		$("#change_language").click(function()	{	Lungo.View.Aside.hide("#features"); Lungo.Router.section("language");	});
+		
+		
+		Lungo.dom('#back_sign_in_shipping_data').tap(function (){	Lungo.View.Aside.hide("#features"); Lungo.Router.back(); });
+		
+		
+		
+		
+		
+		$("#router_to_shipping_data").click(function()	{	open_pay_pal();	});			
+		
+	
+		$("#link_of_gallery").click(function()	{		router_to_gallery(); Lungo.View.Aside.hide("#features"); 	});		
+		
+		$("#website").click(function()	{	openArtistWebSite();	});
+		
+	    $("#desplegable").click(function()
+		{
+			$("#despliega_city").slideDown("slow");
+			$("#despliega_country").slideDown("slow");
+		});
+		
+		var timeouts = [];
+		function run_text_Of_tutorial()
+		{
+			timeouts.remove;
+			
+			$("#tutorial_1").hide();
+			$("#tutorial_2").hide();
+			$("#tutorial_3").hide();
+			$("#tutorial_4").hide();
+			$("#tutorial_5").hide();
+			$("#tutorial_6").hide();
+			$("#tutorial_7").hide();
+			
+			timeouts.push(	$("#tutorial_1").show("slow")	);	
+			timeouts.push( 	setTimeout(function(){	$("#tutorial_1").hide();	$("#tutorial_2").show("slow");	},12000));
+			timeouts.push( 	setTimeout(function(){	$("#tutorial_2").hide();	$("#tutorial_3").show("slow");	},24000));
+			timeouts.push( 	setTimeout(function(){	$("#tutorial_3").hide();	$("#tutorial_4").show("slow");	},36000));
+			timeouts.push(	setTimeout(function(){	$("#tutorial_4").hide();	$("#tutorial_5").show("slow");	},48000));
+			timeouts.push( 	setTimeout(function(){	$("#tutorial_5").hide();	$("#tutorial_6").show("slow");	},60000));
+			timeouts.push( 	setTimeout(function(){	$("#tutorial_6").hide();	$("#tutorial_7").show("slow");	},72000));
+			
+		}
+		
+		var timeouts_video = [];
+		function run_video_Of_tutorial()
+		{
+			timeouts_video.remove;
+			
+			$("#carta-ajuste_1").hide();
+			$("#carta-ajuste_2").hide();
+			$("#carta-ajuste_3").hide();
+			$("#carta-ajuste_4").hide();
+			
+			
+			timeouts_video.push(	$("#carta-ajuste_1").fadeIn( "slow", function() {})	);	
+			timeouts_video.push( 	setTimeout(function(){	$("#carta-ajuste_1").hide();	$("#carta-ajuste_2").fadeIn( "slow", function() {});	},10000));
+			timeouts_video.push( 	setTimeout(function(){	$("#carta-ajuste_2").hide();	$("#carta-ajuste_3").fadeIn( "slow", function() {});	},18000));
+			timeouts_video.push( 	setTimeout(function(){	$("#carta-ajuste_3").hide();	$("#carta-ajuste_4").fadeIn( "slow", function() {});	},28000));
+			
+		}
+		
+		
+		function lanza_video_settings()	{		var v = document.getElementById("video1");  v.load(); setTimeout(function(){	v.play();	} ,30);	}
+
+		
+	</script>
+
+    </body>
+</html>

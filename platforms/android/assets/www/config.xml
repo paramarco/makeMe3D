@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.instaltic" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Make Me 3D</name>
+    <description>
+        this app makes your video to a 3D sculpture.
+    </description>
+    <author email="makeit@instaltic.com" href="http://cordova.io">
+        InstalTIC dev Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+</widget>
